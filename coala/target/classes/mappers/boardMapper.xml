@@ -24,4 +24,27 @@
 			ORDER BY BNO DESC
 	</select>
 	
+	<select id = "read" parameterType = "int" resultType = "kr.co.vo.BoardVO">
+  		SELECT BNO
+  				, TITLE
+  				, CONTENT
+  				, WRITER
+  				, REGDATE
+  			FROM MP_BOARD
+  			WHERE BNO = #{bno}
+	</select>
+	
+	<update id = "update" parameterType = "kr.co.vo.BoardVO">
+   		UPDATE MP_BOARD
+   			SET TITLE = #{title},
+   				CONTENT = #{content}
+			WHERE BNO = #{bno}
+   	</update>
+   	
+   	
+   	<delete id = "delete" parameterType = "int">
+   		DELETE
+   			FROM MP_BOARD
+   			WHERE BNO = #{bno}
+   	</delete>
 </mapper>
