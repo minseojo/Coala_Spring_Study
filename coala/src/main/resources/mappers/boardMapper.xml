@@ -42,9 +42,38 @@
    	</update>
    	
    	
-   	<delete id = "delete" parameterType = "int">
+   	<delete id = "delete" parameterType = "kr.co.vo.BoardVO">
    		DELETE
    			FROM MP_BOARD
    			WHERE BNO = #{bno}
    	</delete>
+   	
+	<select id="listPage" resultType="kr.co.vo.BoardVO" parameterType="kr.co.vo.Criteria">
+   		SELECT	BNO,
+   				TITLE,
+   				CONTENT,
+   				WRITER,
+   				REGDATE
+   		FROM(	
+   				SELECT	BNO,
+   						TITLE,
+   						CONTENT,
+   						WRITER,
+   						REGDATE,
+   						ROW_NUMBER() OVER(ORDER BY BNO DESC) AS RNUM
+   				FROM MP_BOARD
+  			) MP
+  		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+  		ORDER BY BNO DESC
+   	</select>
+   	
+   	<select id = "listCount" resultType = "int">
+   	<![CDATA[
+   		SELECT COUNT(BNO)
+   		FROM MP_BOARD
+   		WHERE BNO > 0
+   	]]>
+   	</select>
+   	
+   	
 </mapper>
