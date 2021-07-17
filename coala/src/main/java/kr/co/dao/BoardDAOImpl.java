@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.co.vo.BoardVO;
 import kr.co.vo.Criteria;
+import kr.co.vo.SearchCriteria;
 
 @Repository
 public class BoardDAOImpl implements BoardDAO{
@@ -22,12 +23,7 @@ public class BoardDAOImpl implements BoardDAO{
 		sqlSession.insert("boardMapper.insert",boardVO);
 	}
 	
-	//게시물 목록 조회
-	@Override
-	public List<BoardVO> list(Criteria cri) throws Exception{
-		return sqlSession.selectList("boardMapper.listPage", cri);
-	}
-		
+
 	//게시물 조회
 	@Override
 	public BoardVO read(int bno) throws Exception{
@@ -46,16 +42,18 @@ public class BoardDAOImpl implements BoardDAO{
 		sqlSession.delete("boardMapper.delete", bno);
 	}
 	
-	//게시물 총 갯수
-	public int listCount() throws Exception {
-		return sqlSession.selectOne("boardMapper.listCount");
+	
+	//게시물 목록 조회
+	@Override
+	public List<BoardVO> list(SearchCriteria scri) throws Exception{
+		return sqlSession.selectList("boardMapper.listPage",scri);
 	}
-	
-	
-	
-	
-	
-	
+		
+	//게시물 총 갯수
+	@Override
+	public int listCount(SearchCriteria scri) throws Exception{
+			return sqlSession.selectOne("boardMapper.listCount",scri);
+		}
 	
 	
 }
