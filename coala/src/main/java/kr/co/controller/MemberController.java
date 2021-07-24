@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.service.MemberService;
@@ -35,8 +36,16 @@ public class MemberController {
 	@RequestMapping(value="/register", method = RequestMethod.POST)
 	public String postRegister(MemberVO vo) throws Exception {
 		logger.info("post register");
-		
-		service.register(vo);
+		int result = service.idChk(vo);
+		try {
+			if(result == 1) {
+				return "/member/register";
+			} else if (result ==0) {
+				service.register(vo);
+			}
+		} catch(Exception e) {
+			throw new RuntimeException();
+		}
 		
 		return "redirect:/";
 	}
@@ -105,4 +114,19 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+	//패스워드 체크
+	@ResponseBody
+	@RequestMapping(value="/passChk", method = RequestMethod.POST)
+	public int passChk(MemberVO vo) throws Exception{
+		int result = service.passChk(vo);
+		return result;
+	}
+	
+	//아이디 체크			
+	@ResponseBody
+	@RequestMapping(value="/idChk", method = RequestMethod.POST)
+	public int idChk(MemberVO vo) throws Exception{
+		int result = service.idChk(vo);
+		return result;
+	}
 }
