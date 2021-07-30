@@ -45,7 +45,7 @@
 			<hr />
 			
 			<section id = "container">
-				<form name="writeForm" method = "post" action = "/board/write">
+				<form name="writeForm" method = "post" action = "/board/write" enctype="multipart/form-data">
 					<c:if test="${member.userId != null }">
 						<div class="form-group">
 							<label for = "title" class="col-sm-2 control-label">제목</label>
@@ -59,6 +59,9 @@
 							<label for = "writer" class="col-sm-2 control-label">작성자</label>
 							<!-- <input type = "text" id = "writer" name = "writer" class="chk form-control" title="작성자를 입력하세요"/> -->	
 							<input type="text" id="writer" name="writer" class="form-control" value="${member.userId}" readonly="readonly" />
+						</div>
+						<div class="form-group">
+							<input type="file" name="file" class="form-control">
 						</div>
 						<div>
 							<button type="button" class="write_btn btn btn-success" >작성</button>
