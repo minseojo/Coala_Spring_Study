@@ -104,4 +104,21 @@
    			#{FILE_SIZE}
    		)
    	</insert>
+   	
+   	<select id ="selectFileList" parameterType="int" resultType="hashMap">
+   		SELECT FILE_NO,
+   			   ORG_FILE_NAME,
+   			   ROUND(FILE_SIZE/1024,1) AS FILE_SIZE
+   		  FROM MP_FILE
+   		 WHERE BNO = #{BNO}
+   		   AND DEL_GB = 'N'
+   	</select>
+   	
+   	<select id="selectFileInfo" parameterType="hashMap" resultType="hashMap">
+   		SELECT
+   			STORED_FILE_NAME,
+   			ORG_FILE_NAME
+   		FROM MP_FILE
+   		WHERE FILE_NO = #{FILE_NO}
+   	</select>
 </mapper>
