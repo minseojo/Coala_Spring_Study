@@ -70,31 +70,35 @@ public class BoardController {
 			return "board/readView";
 		}
 	
-	//게시판 수정뷰
-	@RequestMapping(value = "/updateView",method = RequestMethod.GET)
-	public String updateView(BoardVO boardVO, @ModelAttribute("scri")SearchCriteria scri, Model model) throws Exception{
-		logger.info("updateView");
+		//게시판 수정뷰
+		@RequestMapping(value = "/updateView",method = RequestMethod.GET)
+		public String updateView(BoardVO boardVO, @ModelAttribute("scri")SearchCriteria scri, Model model) throws Exception{
+			logger.info("updateView");
+			
+			model.addAttribute("update", service.read(boardVO.getBno()));
+			model.addAttribute("scri",scri);
+			
+			List<Map<String,Object>> fileList = service.selectFileList(boardVO.getBno());
+			model.addAttribute("file",fileList);
+			
+			return "board/updateView";
+		}
 		
-		model.addAttribute("update", service.read(boardVO.getBno()));
-		model.addAttribute("scri",scri);
-		
-		return "board/updateView";
-	}
-	
-	//게시판 수정
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(BoardVO boardVO, @ModelAttribute("scri") SearchCriteria scri, RedirectAttributes rttr) throws Exception{
-		logger.info("update");
-		
-		service.update(boardVO);
-		
-		rttr.addAttribute("page",scri.getPage());
-		rttr.addAttribute("perPageNum",scri.getPerPageNum());
-		rttr.addAttribute("searchType",scri.getSearchType());
-		rttr.addAttribute("keyword",scri.getKeyword());
-		
-		return "redirect:/board/list";
-	}
+		//게시판 수정
+		@RequestMapping(value = "/update", method = RequestMethod.POST)
+		public String update(BoardVO boardVO, @ModelAttribute("scri") SearchCriteria scri, RedirectAttributes rttr, @RequestParam(value="fileNoDel[]") String[] files, @RequestParam(value="fileNameDel[]") String[] fileNames, MultipartHttpServletRequest mpRequest) throws Exception{
+			logger.info("update");
+			
+			service.update(boardVO, files, fileNames, mpRequest);
+			
+			rttr.addAttribute("bno", boardVO.getBno());
+			rttr.addAttribute("page",scri.getPage());
+			rttr.addAttribute("perPageNum",scri.getPerPageNum());
+			rttr.addAttribute("searchType",scri.getSearchType());
+			rttr.addAttribute("keyword",scri.getKeyword());
+			
+			return "redirect:/board/readView";
+		}
 	
 	//게시판 삭제
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)

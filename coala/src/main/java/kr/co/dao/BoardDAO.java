@@ -34,4 +34,10 @@ public interface BoardDAO {
 	
 	//첨부파일 다운
 	public Map<String,Object> selectFileInfo(Map<String,Object> map) throws Exception;
+	
+	//첨부파일 수정
+	public void updateFile(Map<String, Object> map) throws Exception;
+	
+	//게시판 조회수
+	public void boardHit(int bno) throws Exception;
 }
